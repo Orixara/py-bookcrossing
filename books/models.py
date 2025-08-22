@@ -1,5 +1,5 @@
 from django.db import models
-
+from django.contrib.auth import settings
 
 class Author(models.Model):
     full_name = models.CharField(max_length=255)
@@ -48,6 +48,11 @@ class BookListing(models.Model):
     genre = models.ForeignKey(
         Genre,
         related_name="books",
+        on_delete=models.CASCADE
+    )
+    owner = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        related_name="owned_books",
         on_delete=models.CASCADE
     )
     condition = models.CharField(
