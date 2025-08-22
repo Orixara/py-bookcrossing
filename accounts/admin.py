@@ -1,7 +1,15 @@
 from django.contrib import admin
+from django.contrib.auth import get_user_model
+from django.contrib.auth.admin import UserAdmin
 
-from accounts.models import User, Profile
+from accounts.models import Profile
 
 
-admin.site.register(User)
+User = get_user_model()
+
+
+@admin.register(User)
+class UserAdmin(UserAdmin):
+    pass
+
 admin.site.register(Profile)
