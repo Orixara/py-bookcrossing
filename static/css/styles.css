@@ -1,0 +1,13 @@
+.book-card .book-cover {
+  height: 220px;
+  width: 100%;
+  object-fit: cover;
+  object-position: top;
+}
+
+.line-clamp-2 {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}

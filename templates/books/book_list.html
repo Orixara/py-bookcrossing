@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}<title>All Books • BookCrossing</title>{% endblock %}
+
+{% block content %}
+  <h1 class="h3 mb-3">All Books</h1>
+
+  {% if object_list %}
+    <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-3">
+      {% for book in object_list %}
+        <div class="col">
+          <div class="card h-100 shadow-sm book-card">
+
+            {% if book.image %}
+              <img src="{{ book.image.url }}" class="card-img-top book-cover" alt="{{ book.title }}" loading="lazy">
+            {% else %}
+              <img src="{% static 'img/placeholder-book.png' %}" class="card-img-top book-cover" alt="No cover" loading="lazy">
+            {% endif %}
+
+            <div class="card-body d-flex flex-column">
+              <h5 class="card-title mb-1 line-clamp-2">{{ book.title }}</h5>
+              <p class="card-text text-muted mb-2">
+                {{ book.author.full_name }} · {{ book.genre.name }}
+              </p>
+              <span class="badge bg-secondary align-self-start mb-3">
+                {{ book.get_condition_display }}
+              </span>
+
+              <div class="mt-auto d-flex gap-2">
+                <a href="{% url 'books:book-detail' book.pk %}" class="btn btn-outline-primary btn-sm">Details</a>
+
+                {% if user.is_authenticated and book.owner_id != user.id %}
+                  <a href="{% url 'bookings:book-reserve' book_pk=book.pk %}" class="btn btn-primary btn-sm">Reserve</a>
+                {% endif %}
+
+                {% if user.is_authenticated and book.owner_id == user.id %}
+                  <a href="{% url 'books:book-update' book.pk %}" class="btn btn-outline-secondary btn-sm">Edit</a>
+                {% endif %}
+              </div>
+            </div>
+
+            <div class="card-footer small text-muted">
+              Owner: {{ book.owner.username }}
+            </div>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  {% else %}
+    <div class="text-center py-5">
+      <p class="lead mb-3">No books yet.</p>
+      {% if user.is_authenticated %}
+        <a class="btn btn-primary" href="{% url 'books:book-create' %}">Add your first book</a>
+      {% endif %}
+    </div>
+  {% endif %}
+{% endblock %}
